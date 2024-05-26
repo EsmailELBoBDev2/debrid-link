@@ -8,6 +8,8 @@
 #######
 
 ## Login to qBittorrent and get the cookie value
+## DO NOT FORGET TO REPLACE username= and password= with your username and password of web ui. username=admin&password=adminadmin
+## by default port is 8080 but change it if needed.
 curl_output=$(curl -i --header 'Referer: http://localhost:8080' --data 'username=admin&password=adminadmin' http://localhost:8080/api/v2/auth/login)
 set_cookie_header=$(echo "$curl_output" | grep -i 'Set-Cookie' | tr -d '[:space:]' | sed 's/set-cookie://i')
 cookie_value=$(echo "$set_cookie_header" | cut -d ';' -f 1 | tr -d ';')
@@ -35,7 +37,7 @@ echo "$json_output" | jq -r '.[] | .name, .magnet_uri' | while IFS= read -r name
         -H "Authorization: Bearer $API_KEY" \
         -d "url=$FILE_URL")
 
-    ## Checks for errors like torrent is too big.
+    ## Checks for errors like torrent is too big and if so adds it to failed_torrents.txt file.
     if echo "$curl_output" | jq -e '.success == false' >/dev/null; then
         error=$(echo "$curl_output" | jq -r '.error')
         error_id=$(echo "$curl_output" | jq -r '.error_id')
