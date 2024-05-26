@@ -1,2 +1,1 @@
-# debrid-link
-A script and various guides for debrid-link.com
+# Several guides and scripts to help you setup debrid-link with plex and make your life easier.
